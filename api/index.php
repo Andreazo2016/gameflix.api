@@ -20,16 +20,24 @@ $app->response->headers->set('Access-Control-Allow-Methods', 'GET, POST, PUT, DE
 
         $app->response->setBody(json_encode($routes));
     });
-
+    //get all Games
     $app->get('/games',function () use ($app){
         $games = Game::all();
         $app->response->setBody(json_encode($games));
     });
+    //get Games by id
     $app->get('/games/:id',function ($id) use ($app){
         $game = Game::find($id);
         if($game === null) $game = false;
         $app->response->setBody(json_encode($game));
     });
+    //get Games by Categoria
+    $app->get('/games-categoria/:categoria',function ($categoria) use ($app){
+        $gameByCategoria = Game::select('*')->where('categoria','=',$categoria)->get();
+
+        $app->response->setBody(json_encode($gameByCategoria));
+    });
+    //create Games
     $app->post('/games',function () use ($app){
         $nome = $app->request->post('nome');
         $categoria = $app->request->post('categoria');
@@ -43,15 +51,25 @@ $app->response->headers->set('Access-Control-Allow-Methods', 'GET, POST, PUT, DE
         $app->response->setBody(json_encode($reposta));
 
     });
-
+    //get all Users
     $app->get('/usuarios',function () use ($app){
         $usuarios = Usuario::all();
         $app->response->setBody(json_encode($usuarios));
     });
+    //create Users
     $app->post('/usuarios',function () use ($app){
+        $cpf = $app->request->post('cpf');
         $nome = $app->request->post('nome');
-        $teste = ['nome'=>$nome];
-        $app->response->setBody(json_encode($teste));
+        $email = $app->request->post('email');
+        $endereco = $app->request->post('endereco');
+        $login = $app->request->post('login');
+        $senha = $app->request->post('senha');
+
+        Usuario::create(['cpf'=>$cpf,'nome'=>$nome,'email'=>$email,'endereco'=>$endereco,'login'=>$login,'senha'=>$senha]);
+        $reposta = [
+            '200'=>'OK'
+        ];
+        $app->response->setBody(json_encode($reposta));
     });
 
 

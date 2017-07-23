@@ -13,6 +13,7 @@ use \Illuminate\Database\Eloquent\Model as Illuminate;
 class Game extends Illuminate
 {
     protected $table = 'game';
+    //variavel criado para que o laravel não precise guardar o time
     public $timestamps = false;
 
     public $fillable = ['id', 'nome', 'categoria','preco','url'];

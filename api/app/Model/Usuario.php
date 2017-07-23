@@ -13,6 +13,7 @@ use \Illuminate\Database\Eloquent\Model as Illuminate;
 class Usuario extends Illuminate
 {
     protected $table = 'usuario';
+    public $timestamps = false;
 
     public $fillable = ['cpf', 'nome', 'email','endereco','login','senha'];
 }
