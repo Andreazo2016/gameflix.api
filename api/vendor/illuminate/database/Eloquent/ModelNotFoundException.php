@@ -7,21 +7,21 @@ use RuntimeException;
 class ModelNotFoundException extends RuntimeException
 {
     /**
-     * Name of the affected Eloquent Model.
+     * Name of the affected Eloquent model.
      *
      * @var string
      */
     protected $model;
 
     /**
-     * The affected Model IDs.
+     * The affected model IDs.
      *
      * @var int|array
      */
     protected $ids;
 
     /**
-     * Set the affected Eloquent Model and instance ids.
+     * Set the affected Eloquent model and instance ids.
      *
      * @param  string  $model
      * @param  int|array  $ids
@@ -32,7 +32,7 @@ class ModelNotFoundException extends RuntimeException
         $this->model = $model;
         $this->ids = array_wrap($ids);
 
-        $this->message = "No query results for Model [{$model}]";
+        $this->message = "No query results for model [{$model}]";
 
         if (count($this->ids) > 0) {
             $this->message .= ' '.implode(', ', $this->ids);
@@ -44,7 +44,7 @@ class ModelNotFoundException extends RuntimeException
     }
 
     /**
-     * Get the affected Eloquent Model.
+     * Get the affected Eloquent model.
      *
      * @return string
      */
@@ -54,7 +54,7 @@ class ModelNotFoundException extends RuntimeException
     }
 
     /**
-     * Get the affected Eloquent Model IDs.
+     * Get the affected Eloquent model IDs.
      *
      * @return int|array
      */

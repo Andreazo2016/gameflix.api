@@ -7,7 +7,7 @@ use Illuminate\Contracts\Events\Dispatcher;
 trait HasEvents
 {
     /**
-     * The event map for the Model.
+     * The event map for the model.
      *
      * Allows for object-based events for native Eloquent events.
      *
@@ -36,9 +36,9 @@ trait HasEvents
 
         $className = is_string($class) ? $class : get_class($class);
 
-        // When registering a Model observer, we will spin through the possible events
+        // When registering a model observer, we will spin through the possible events
         // and determine if this observer has that method. If it does, we will hook
-        // it into the Model's event system, making it convenient to watch these.
+        // it into the model's event system, making it convenient to watch these.
         foreach ($instance->getObservableEvents() as $event) {
             if (method_exists($class, $event)) {
                 static::registerModelEvent($event, $className.'@'.$event);
@@ -103,7 +103,7 @@ trait HasEvents
     }
 
     /**
-     * Register a Model event with the dispatcher.
+     * Register a model event with the dispatcher.
      *
      * @param  string  $event
      * @param  \Closure|string  $callback
@@ -119,7 +119,7 @@ trait HasEvents
     }
 
     /**
-     * Fire the given event for the Model.
+     * Fire the given event for the model.
      *
      * @param  string  $event
      * @param  bool  $halt
@@ -136,15 +136,21 @@ trait HasEvents
         // returns a result we can return that result, or we'll call the string events.
         $method = $halt ? 'until' : 'fire';
 
-        $result = $this->fireCustomModelEvent($event, $method);
+        $result = $this->filterModelEventResults(
+            $this->fireCustomModelEvent($event, $method)
+        );
 
-        return ! is_null($result) ? $result : static::$dispatcher->{$method}(
+        if ($result === false) {
+            return false;
+        }
+
+        return ! empty($result) ? $result : static::$dispatcher->{$method}(
             "eloquent.{$event}: ".static::class, $this
         );
     }
 
     /**
-     * Fire a custom Model event for the given event.
+     * Fire a custom model event for the given event.
      *
      * @param  string  $event
      * @param  string  $method
@@ -164,7 +170,24 @@ trait HasEvents
     }
 
     /**
-     * Register a saving Model event with the dispatcher.
+     * Filter the model event results.
+     *
+     * @param  mixed  $result
+     * @return mixed
+     */
+    protected function filterModelEventResults($result)
+    {
+        if (is_array($result)) {
+            $result = array_filter($result, function ($response) {
+                return ! is_null($response);
+            });
+        }
+
+        return $result;
+    }
+
+    /**
+     * Register a saving model event with the dispatcher.
      *
      * @param  \Closure|string  $callback
      * @return void
@@ -175,7 +198,7 @@ trait HasEvents
     }
 
     /**
-     * Register a saved Model event with the dispatcher.
+     * Register a saved model event with the dispatcher.
      *
      * @param  \Closure|string  $callback
      * @return void
@@ -186,7 +209,7 @@ trait HasEvents
     }
 
     /**
-     * Register an updating Model event with the dispatcher.
+     * Register an updating model event with the dispatcher.
      *
      * @param  \Closure|string  $callback
      * @return void
@@ -197,7 +220,7 @@ trait HasEvents
     }
 
     /**
-     * Register an updated Model event with the dispatcher.
+     * Register an updated model event with the dispatcher.
      *
      * @param  \Closure|string  $callback
      * @return void
@@ -208,7 +231,7 @@ trait HasEvents
     }
 
     /**
-     * Register a creating Model event with the dispatcher.
+     * Register a creating model event with the dispatcher.
      *
      * @param  \Closure|string  $callback
      * @return void
@@ -219,7 +242,7 @@ trait HasEvents
     }
 
     /**
-     * Register a created Model event with the dispatcher.
+     * Register a created model event with the dispatcher.
      *
      * @param  \Closure|string  $callback
      * @return void
@@ -230,7 +253,7 @@ trait HasEvents
     }
 
     /**
-     * Register a deleting Model event with the dispatcher.
+     * Register a deleting model event with the dispatcher.
      *
      * @param  \Closure|string  $callback
      * @return void
@@ -241,7 +264,7 @@ trait HasEvents
     }
 
     /**
-     * Register a deleted Model event with the dispatcher.
+     * Register a deleted model event with the dispatcher.
      *
      * @param  \Closure|string  $callback
      * @return void
@@ -252,7 +275,7 @@ trait HasEvents
     }
 
     /**
-     * Remove all of the event listeners for the Model.
+     * Remove all of the event listeners for the model.
      *
      * @return void
      */

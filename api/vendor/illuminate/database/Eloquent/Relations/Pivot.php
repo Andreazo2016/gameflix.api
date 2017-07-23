@@ -8,11 +8,11 @@ use Illuminate\Database\Eloquent\Builder;
 class Pivot extends Model
 {
     /**
-     * The parent Model of the relationship.
+     * The parent model of the relationship.
      *
      * @var \Illuminate\Database\Eloquent\Model
      */
-    protected $parent;
+    public $parent;
 
     /**
      * The name of the foreign key column.
@@ -36,7 +36,7 @@ class Pivot extends Model
     protected $guarded = [];
 
     /**
-     * Create a new pivot Model instance.
+     * Create a new pivot model instance.
      *
      * @param  \Illuminate\Database\Eloquent\Model  $parent
      * @param  array   $attributes
@@ -48,7 +48,7 @@ class Pivot extends Model
     {
         parent::__construct();
 
-        // The pivot Model is a "dynamic" Model since we will set the tables dynamically
+        // The pivot model is a "dynamic" model since we will set the tables dynamically
         // for the instance. This allows it work for any intermediate tables for the
         // many to many relationship that are defined by this developer's classes.
         $this->setConnection($parent->getConnectionName())
@@ -57,7 +57,7 @@ class Pivot extends Model
              ->syncOriginal();
 
         // We store off the parent instance so we will access the timestamp column names
-        // for the Model, since the pivot Model timestamps aren't easily configurable
+        // for the model, since the pivot model timestamps aren't easily configurable
         // from the developer's point of view. We can use the parents to get these.
         $this->parent = $parent;
 
@@ -67,7 +67,7 @@ class Pivot extends Model
     }
 
     /**
-     * Create a new pivot Model from raw values returned from a query.
+     * Create a new pivot model from raw values returned from a query.
      *
      * @param  \Illuminate\Database\Eloquent\Model  $parent
      * @param  array   $attributes
@@ -98,7 +98,7 @@ class Pivot extends Model
     }
 
     /**
-     * Delete the pivot Model record from the database.
+     * Delete the pivot model record from the database.
      *
      * @return int
      */
@@ -151,7 +151,7 @@ class Pivot extends Model
     }
 
     /**
-     * Set the key names for the pivot Model instance.
+     * Set the key names for the pivot model instance.
      *
      * @param  string  $foreignKey
      * @param  string  $relatedKey
@@ -167,7 +167,7 @@ class Pivot extends Model
     }
 
     /**
-     * Determine if the pivot Model has timestamp attributes.
+     * Determine if the pivot model has timestamp attributes.
      *
      * @return bool
      */

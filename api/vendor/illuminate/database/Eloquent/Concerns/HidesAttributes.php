@@ -19,7 +19,7 @@ trait HidesAttributes
     protected $visible = [];
 
     /**
-     * Get the hidden attributes for the Model.
+     * Get the hidden attributes for the model.
      *
      * @return array
      */
@@ -29,7 +29,7 @@ trait HidesAttributes
     }
 
     /**
-     * Set the hidden attributes for the Model.
+     * Set the hidden attributes for the model.
      *
      * @param  array  $hidden
      * @return $this
@@ -42,7 +42,7 @@ trait HidesAttributes
     }
 
     /**
-     * Add hidden attributes for the Model.
+     * Add hidden attributes for the model.
      *
      * @param  array|string|null  $attributes
      * @return void
@@ -55,7 +55,7 @@ trait HidesAttributes
     }
 
     /**
-     * Get the visible attributes for the Model.
+     * Get the visible attributes for the model.
      *
      * @return array
      */
@@ -65,7 +65,7 @@ trait HidesAttributes
     }
 
     /**
-     * Set the visible attributes for the Model.
+     * Set the visible attributes for the model.
      *
      * @param  array  $visible
      * @return $this
@@ -78,7 +78,7 @@ trait HidesAttributes
     }
 
     /**
-     * Add visible attributes for the Model.
+     * Add visible attributes for the model.
      *
      * @param  array|string|null  $attributes
      * @return void

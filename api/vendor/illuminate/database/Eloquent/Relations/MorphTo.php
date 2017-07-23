@@ -140,7 +140,7 @@ class MorphTo extends BelongsTo
     }
 
     /**
-     * Create a new Model instance by type.
+     * Create a new model instance by type.
      *
      * @param  string  $type
      * @return \Illuminate\Database\Eloquent\Model
@@ -184,7 +184,7 @@ class MorphTo extends BelongsTo
     }
 
     /**
-     * Associate the Model instance to the given parent.
+     * Associate the model instance to the given parent.
      *
      * @param  \Illuminate\Database\Eloquent\Model  $model
      * @return \Illuminate\Database\Eloquent\Model
@@ -199,7 +199,7 @@ class MorphTo extends BelongsTo
     }
 
     /**
-     * Dissociate previously associated Model from the given parent.
+     * Dissociate previously associated model from the given parent.
      *
      * @return \Illuminate\Database\Eloquent\Model
      */

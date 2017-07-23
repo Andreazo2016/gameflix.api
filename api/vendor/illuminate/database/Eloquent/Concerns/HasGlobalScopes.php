@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Scope;
 trait HasGlobalScopes
 {
     /**
-     * Register a new global scope on the Model.
+     * Register a new global scope on the model.
      *
      * @param  \Illuminate\Database\Eloquent\Scope|\Closure|string  $scope
      * @param  \Closure|null  $implementation
@@ -32,7 +32,7 @@ trait HasGlobalScopes
     }
 
     /**
-     * Determine if a Model has a global scope.
+     * Determine if a model has a global scope.
      *
      * @param  \Illuminate\Database\Eloquent\Scope|string  $scope
      * @return bool
@@ -43,7 +43,7 @@ trait HasGlobalScopes
     }
 
     /**
-     * Get a global scope registered with the Model.
+     * Get a global scope registered with the model.
      *
      * @param  \Illuminate\Database\Eloquent\Scope|string  $scope
      * @return \Illuminate\Database\Eloquent\Scope|\Closure|null

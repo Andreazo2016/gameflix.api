@@ -120,7 +120,7 @@ class MorphToMany extends BelongsToMany
     }
 
     /**
-     * Create a new pivot Model instance.
+     * Create a new pivot model instance.
      *
      * @param  array  $attributes
      * @param  bool   $exists
@@ -128,7 +128,10 @@ class MorphToMany extends BelongsToMany
      */
     public function newPivot(array $attributes = [], $exists = false)
     {
-        $pivot = new MorphPivot($this->parent, $attributes, $this->table, $exists);
+        $using = $this->using;
+
+        $pivot = $using ? $using::fromRawAttributes($this->parent, $attributes, $this->table, $exists)
+                        : new MorphPivot($this->parent, $attributes, $this->table, $exists);
 
         $pivot->setPivotKeys($this->foreignKey, $this->relatedKey)
               ->setMorphType($this->morphType)
@@ -148,7 +151,7 @@ class MorphToMany extends BelongsToMany
     }
 
     /**
-     * Get the class name of the parent Model.
+     * Get the class name of the parent model.
      *
      * @return string
      */

@@ -5,14 +5,14 @@ namespace Illuminate\Database\Eloquent;
 trait SoftDeletes
 {
     /**
-     * Indicates if the Model is currently force deleting.
+     * Indicates if the model is currently force deleting.
      *
      * @var bool
      */
     protected $forceDeleting = false;
 
     /**
-     * Boot the soft deleting trait for a Model.
+     * Boot the soft deleting trait for a model.
      *
      * @return void
      */
@@ -22,7 +22,7 @@ trait SoftDeletes
     }
 
     /**
-     * Force a hard delete on a soft deleted Model.
+     * Force a hard delete on a soft deleted model.
      *
      * @return bool|null
      */
@@ -38,7 +38,7 @@ trait SoftDeletes
     }
 
     /**
-     * Perform the actual delete query on this Model instance.
+     * Perform the actual delete query on this model instance.
      *
      * @return mixed
      */
@@ -52,7 +52,7 @@ trait SoftDeletes
     }
 
     /**
-     * Perform the actual delete query on this Model instance.
+     * Perform the actual delete query on this model instance.
      *
      * @return void
      */
@@ -60,13 +60,23 @@ trait SoftDeletes
     {
         $query = $this->newQueryWithoutScopes()->where($this->getKeyName(), $this->getKey());
 
-        $this->{$this->getDeletedAtColumn()} = $time = $this->freshTimestamp();
+        $time = $this->freshTimestamp();
 
-        $query->update([$this->getDeletedAtColumn() => $this->fromDateTime($time)]);
+        $columns = [$this->getDeletedAtColumn() => $this->fromDateTime($time)];
+
+        $this->{$this->getDeletedAtColumn()} = $time;
+
+        if ($this->timestamps) {
+            $this->{$this->getUpdatedAtColumn()} = $time;
+
+            $columns[$this->getUpdatedAtColumn()] = $this->fromDateTime($time);
+        }
+
+        $query->update($columns);
     }
 
     /**
-     * Restore a soft-deleted Model instance.
+     * Restore a soft-deleted model instance.
      *
      * @return bool|null
      */
@@ -81,7 +91,7 @@ trait SoftDeletes
 
         $this->{$this->getDeletedAtColumn()} = null;
 
-        // Once we have saved the Model, we will fire the "restored" event so this
+        // Once we have saved the model, we will fire the "restored" event so this
         // developer will do anything they need to after a restore operation is
         // totally finished. Then we will return the result of the save call.
         $this->exists = true;
@@ -94,7 +104,7 @@ trait SoftDeletes
     }
 
     /**
-     * Determine if the Model instance has been soft-deleted.
+     * Determine if the model instance has been soft-deleted.
      *
      * @return bool
      */
@@ -104,7 +114,7 @@ trait SoftDeletes
     }
 
     /**
-     * Register a restoring Model event with the dispatcher.
+     * Register a restoring model event with the dispatcher.
      *
      * @param  \Closure|string  $callback
      * @return void
@@ -115,7 +125,7 @@ trait SoftDeletes
     }
 
     /**
-     * Register a restored Model event with the dispatcher.
+     * Register a restored model event with the dispatcher.
      *
      * @param  \Closure|string  $callback
      * @return void
@@ -126,7 +136,7 @@ trait SoftDeletes
     }
 
     /**
-     * Determine if the Model is currently force deleting.
+     * Determine if the model is currently force deleting.
      *
      * @return bool
      */

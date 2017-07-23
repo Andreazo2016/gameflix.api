@@ -9,7 +9,7 @@ interface Registrar
      *
      * @param  string  $uri
      * @param  \Closure|array|string  $action
-     * @return void
+     * @return \Illuminate\Routing\Route
      */
     public function get($uri, $action);
 
@@ -18,7 +18,7 @@ interface Registrar
      *
      * @param  string  $uri
      * @param  \Closure|array|string  $action
-     * @return void
+     * @return \Illuminate\Routing\Route
      */
     public function post($uri, $action);
 
@@ -27,7 +27,7 @@ interface Registrar
      *
      * @param  string  $uri
      * @param  \Closure|array|string  $action
-     * @return void
+     * @return \Illuminate\Routing\Route
      */
     public function put($uri, $action);
 
@@ -36,7 +36,7 @@ interface Registrar
      *
      * @param  string  $uri
      * @param  \Closure|array|string  $action
-     * @return void
+     * @return \Illuminate\Routing\Route
      */
     public function delete($uri, $action);
 
@@ -45,7 +45,7 @@ interface Registrar
      *
      * @param  string  $uri
      * @param  \Closure|array|string  $action
-     * @return void
+     * @return \Illuminate\Routing\Route
      */
     public function patch($uri, $action);
 
@@ -54,7 +54,7 @@ interface Registrar
      *
      * @param  string  $uri
      * @param  \Closure|array|string  $action
-     * @return void
+     * @return \Illuminate\Routing\Route
      */
     public function options($uri, $action);
 
@@ -64,7 +64,7 @@ interface Registrar
      * @param  array|string  $methods
      * @param  string  $uri
      * @param  \Closure|array|string  $action
-     * @return void
+     * @return \Illuminate\Routing\Route
      */
     public function match($methods, $uri, $action);
 
@@ -96,7 +96,7 @@ interface Registrar
     public function substituteBindings($route);
 
     /**
-     * Substitute the implicit Eloquent Model bindings for the route.
+     * Substitute the implicit Eloquent model bindings for the route.
      *
      * @param  \Illuminate\Routing\Route  $route
      * @return void

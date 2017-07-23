@@ -20,7 +20,7 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 trait HasRelationships
 {
     /**
-     * The loaded relationships for the Model.
+     * The loaded relationships for the model.
      *
      * @var array
      */
@@ -143,7 +143,7 @@ trait HasRelationships
 
         // If the type value is null it is probably safe to assume we're eager loading
         // the relationship. In this case we'll just pass in a dummy query where we
-        // need to remove any eager loads that may already be defined on a Model.
+        // need to remove any eager loads that may already be defined on a model.
         return empty($class = $this->{$type})
                     ? $this->morphEagerTo($name, $type, $id)
                     : $this->morphInstanceTo($class, $name, $type, $id);
@@ -176,7 +176,7 @@ trait HasRelationships
     protected function morphInstanceTo($target, $name, $type, $id)
     {
         $instance = $this->newRelatedInstance(
-            Model::getActualClassNameForMorph($target)
+            static::getActualClassNameForMorph($target)
         );
 
         return new MorphTo(
@@ -192,7 +192,7 @@ trait HasRelationships
      */
     public static function getActualClassNameForMorph($class)
     {
-        return Arr::get(Relation::morphMap(), $class, $class);
+        return Arr::get(Relation::morphMap() ?: [], $class, $class);
     }
 
     /**
@@ -308,7 +308,7 @@ trait HasRelationships
         $relatedKey = $relatedKey ?: $instance->getForeignKey();
 
         // If no table name was provided, we can guess it by concatenating the two
-        // models using underscores in alphabetical order. The two Model names
+        // models using underscores in alphabetical order. The two model names
         // are transformed to snake case from their default CamelCase also.
         if (is_null($table)) {
             $table = $this->joiningTable($related);
@@ -343,7 +343,7 @@ trait HasRelationships
 
         $relatedKey = $relatedKey ?: $instance->getForeignKey();
 
-        // Now we're ready to create a new query builder for this related Model and
+        // Now we're ready to create a new query builder for this related model and
         // the relationship instances for this relation. This relations will set
         // appropriate query constraints then entirely manages the hydrations.
         $table = $table ?: Str::plural($name);
@@ -406,7 +406,7 @@ trait HasRelationships
             Str::snake(class_basename($this)),
         ];
 
-        // Now that we have the Model names in an array we can just sort them and
+        // Now that we have the model names in an array we can just sort them and
         // use the implode function to join them together with an underscores,
         // which is typically used by convention within the database system.
         sort($models);
@@ -415,7 +415,7 @@ trait HasRelationships
     }
 
     /**
-     * Determine if the Model touches a given relation.
+     * Determine if the model touches a given relation.
      *
      * @param  string  $relation
      * @return bool
@@ -426,7 +426,7 @@ trait HasRelationships
     }
 
     /**
-     * Touch the owning relations of the Model.
+     * Touch the owning relations of the model.
      *
      * @return void
      */
@@ -477,7 +477,7 @@ trait HasRelationships
     }
 
     /**
-     * Create a new Model instance for a related Model.
+     * Create a new model instance for a related model.
      *
      * @param  string  $class
      * @return mixed
@@ -524,7 +524,7 @@ trait HasRelationships
     }
 
     /**
-     * Set the specific relationship in the Model.
+     * Set the specific relationship in the model.
      *
      * @param  string  $relation
      * @param  mixed  $value
@@ -538,7 +538,7 @@ trait HasRelationships
     }
 
     /**
-     * Set the entire relations array on the Model.
+     * Set the entire relations array on the model.
      *
      * @param  array  $relations
      * @return $this

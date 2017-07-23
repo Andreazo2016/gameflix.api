@@ -10,7 +10,7 @@ use Illuminate\Support\Collection as BaseCollection;
 class Collection extends BaseCollection implements QueueableCollection
 {
     /**
-     * Find a Model in the collection by key.
+     * Find a model in the collection by key.
      *
      * @param  mixed  $key
      * @param  mixed  $default
@@ -83,7 +83,11 @@ class Collection extends BaseCollection implements QueueableCollection
             return parent::contains(...func_get_args());
         }
 
-        $key = $key instanceof Model ? $key->getKey() : $key;
+        if ($key instanceof Model) {
+            return parent::contains(function ($model) use ($key) {
+                return $model->is($key);
+            });
+        }
 
         return parent::contains(function ($model) use ($key) {
             return $model->getKey() == $key;
@@ -350,7 +354,7 @@ class Collection extends BaseCollection implements QueueableCollection
 
         $this->each(function ($model) use ($class) {
             if (get_class($model) !== $class) {
-                throw new LogicException('Queueing collections with multiple Model types is not supported.');
+                throw new LogicException('Queueing collections with multiple model types is not supported.');
             }
         });
 

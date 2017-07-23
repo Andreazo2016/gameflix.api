@@ -21,7 +21,7 @@ class BelongsToMany extends Relation
     protected $table;
 
     /**
-     * The foreign key of the parent Model.
+     * The foreign key of the parent model.
      *
      * @var string
      */
@@ -77,7 +77,7 @@ class BelongsToMany extends Relation
     protected $pivotUpdatedAt;
 
     /**
-     * The class name of the custom pivot Model to use for the relationship.
+     * The class name of the custom pivot model to use for the relationship.
      *
      * @var string
      */
@@ -135,9 +135,9 @@ class BelongsToMany extends Relation
     {
         $query = $query ?: $this->query;
 
-        // We need to join to the intermediate table on the related Model's primary
+        // We need to join to the intermediate table on the related model's primary
         // key column with the intermediate table's foreign key for the related
-        // Model instance. Then we can set the "where" for the parent models.
+        // model instance. Then we can set the "where" for the parent models.
         $baseTable = $this->related->getTable();
 
         $key = $baseTable.'.'.$this->related->getKeyName();
@@ -215,7 +215,7 @@ class BelongsToMany extends Relation
     }
 
     /**
-     * Build Model dictionary keyed by the relation's foreign key.
+     * Build model dictionary keyed by the relation's foreign key.
      *
      * @param  \Illuminate\Database\Eloquent\Collection  $results
      * @return array
@@ -235,7 +235,7 @@ class BelongsToMany extends Relation
     }
 
     /**
-     * Specify the custom pivot Model to use for the relationship.
+     * Specify the custom pivot model to use for the relationship.
      *
      * @param  string  $class
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
@@ -305,7 +305,7 @@ class BelongsToMany extends Relation
     }
 
     /**
-     * Find a related Model by its primary key or return new instance of the related Model.
+     * Find a related model by its primary key or return new instance of the related model.
      *
      * @param  mixed  $id
      * @param  array  $columns
@@ -321,7 +321,7 @@ class BelongsToMany extends Relation
     }
 
     /**
-     * Get the first related Model record matching the attributes or instantiate it.
+     * Get the first related model record matching the attributes or instantiate it.
      *
      * @param  array  $attributes
      * @return \Illuminate\Database\Eloquent\Model
@@ -375,7 +375,7 @@ class BelongsToMany extends Relation
     }
 
     /**
-     * Find a related Model by its primary key.
+     * Find a related model by its primary key.
      *
      * @param  mixed  $id
      * @param  array  $columns
@@ -403,7 +403,7 @@ class BelongsToMany extends Relation
     }
 
     /**
-     * Find a related Model by its primary key or throw an exception.
+     * Find a related model by its primary key or throw an exception.
      *
      * @param  mixed  $id
      * @param  array  $columns
@@ -423,7 +423,7 @@ class BelongsToMany extends Relation
             return $result;
         }
 
-        throw (new ModelNotFoundException)->setModel(get_class($this->parent));
+        throw (new ModelNotFoundException)->setModel(get_class($this->related));
     }
 
     /**
@@ -453,7 +453,7 @@ class BelongsToMany extends Relation
             return $model;
         }
 
-        throw (new ModelNotFoundException)->setModel(get_class($this->parent));
+        throw (new ModelNotFoundException)->setModel(get_class($this->related));
     }
 
     /**
@@ -476,7 +476,7 @@ class BelongsToMany extends Relation
     {
         // First we'll add the proper select columns onto the query so it is run with
         // the proper columns. Then, we will get the results and hydrate out pivot
-        // models with the result of those columns as a separate Model relation.
+        // models with the result of those columns as a separate model relation.
         $columns = $this->query->getQuery()->columns ? [] : $columns;
 
         $builder = $this->query->applyScopes();
@@ -591,8 +591,8 @@ class BelongsToMany extends Relation
     protected function hydratePivotRelation(array $models)
     {
         // To hydrate the pivot relationship, we will just gather the pivot attributes
-        // and create a new Pivot Model, which is basically a dynamic Model that we
-        // will set the attributes, table, and connections on so it they be used.
+        // and create a new Pivot model, which is basically a dynamic model that we
+        // will set the attributes, table, and connections on it so it will work.
         foreach ($models as $model) {
             $model->setRelation('pivot', $this->newExistingPivot(
                 $this->migratePivotAttributes($model)
@@ -601,7 +601,7 @@ class BelongsToMany extends Relation
     }
 
     /**
-     * Get the pivot attributes from a Model.
+     * Get the pivot attributes from a model.
      *
      * @param  \Illuminate\Database\Eloquent\Model  $model
      * @return array
@@ -625,7 +625,7 @@ class BelongsToMany extends Relation
     }
 
     /**
-     * If we're touching the parent Model, touch.
+     * If we're touching the parent model, touch.
      *
      * @return void
      */
@@ -676,7 +676,7 @@ class BelongsToMany extends Relation
         ];
 
         // If we actually have IDs for the relation, we will run the query to update all
-        // the related Model's timestamps, to make sure these all reflect the changes
+        // the related model's timestamps, to make sure these all reflect the changes
         // to the parent models. This will help us keep any caching synced up here.
         if (count($ids = $this->allRelatedIds()) > 0) {
             $this->getRelated()->newQuery()->whereIn($key, $ids)->update($columns);
@@ -698,7 +698,7 @@ class BelongsToMany extends Relation
     }
 
     /**
-     * Save a new Model and attach it to the parent Model.
+     * Save a new model and attach it to the parent model.
      *
      * @param  \Illuminate\Database\Eloquent\Model  $model
      * @param  array  $pivotAttributes
@@ -715,7 +715,7 @@ class BelongsToMany extends Relation
     }
 
     /**
-     * Save an array of new models and attach them to the parent Model.
+     * Save an array of new models and attach them to the parent model.
      *
      * @param  \Illuminate\Support\Collection|array  $models
      * @param  array  $pivotAttributes
@@ -733,7 +733,7 @@ class BelongsToMany extends Relation
     }
 
     /**
-     * Create a new instance of the related Model.
+     * Create a new instance of the related model.
      *
      * @param  array  $attributes
      * @param  array  $joining
@@ -744,7 +744,7 @@ class BelongsToMany extends Relation
     {
         $instance = $this->related->newInstance($attributes);
 
-        // Once we save the related Model, we need to attach it to the base Model via
+        // Once we save the related model, we need to attach it to the base model via
         // through intermediate table so we'll use the existing "attach" method to
         // accomplish this which will insert the record and any more attributes.
         $instance->save(['touch' => false]);

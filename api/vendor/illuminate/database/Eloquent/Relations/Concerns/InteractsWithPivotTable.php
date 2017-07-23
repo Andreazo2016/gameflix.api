@@ -9,9 +9,9 @@ use Illuminate\Support\Collection as BaseCollection;
 trait InteractsWithPivotTable
 {
     /**
-     * Toggles a Model (or models) from the parent.
+     * Toggles a model (or models) from the parent.
      *
-     * Each existing Model is detached, and non existing ones are attached.
+     * Each existing model is detached, and non existing ones are attached.
      *
      * @param  mixed  $ids
      * @param  bool   $touch
@@ -93,7 +93,7 @@ trait InteractsWithPivotTable
         )->all();
 
         $detach = array_diff($current, array_keys(
-            $records = $this->formatRecordsList($this->parseIds($ids))
+            $records = $this->formatRecordsList((array) $this->parseIds($ids))
         ));
 
         // Next, we will take the differences of the currents and given IDs and detach
@@ -163,7 +163,7 @@ trait InteractsWithPivotTable
             }
 
             // Now we'll try to update an existing pivot record with the attributes that were
-            // given to the method. If the Model is actually updated we will add it to the
+            // given to the method. If the model is actually updated we will add it to the
             // list of updated pivot records so we return them back out to the consumer.
             elseif (count($attributes) > 0 &&
                 $this->updateExistingPivot($id, $attributes, $touch)) {
@@ -198,7 +198,7 @@ trait InteractsWithPivotTable
     }
 
     /**
-     * Attach a Model to the parent.
+     * Attach a model to the parent.
      *
      * @param  mixed  $id
      * @param  array  $attributes
@@ -292,8 +292,8 @@ trait InteractsWithPivotTable
         $record[$this->foreignKey] = $this->parent->getKey();
 
         // If the record needs to have creation and update timestamps, we will make
-        // them by calling the parent Model's "freshTimestamp" method which will
-        // provide us with a fresh timestamp in this Model's preferred format.
+        // them by calling the parent model's "freshTimestamp" method which will
+        // provide us with a fresh timestamp in this model's preferred format.
         if ($timed) {
             $record = $this->addTimestampsToAttachment($record);
         }
@@ -369,7 +369,7 @@ trait InteractsWithPivotTable
     }
 
     /**
-     * Create a new pivot Model instance.
+     * Create a new pivot model instance.
      *
      * @param  array  $attributes
      * @param  bool   $exists
@@ -385,7 +385,7 @@ trait InteractsWithPivotTable
     }
 
     /**
-     * Create a new existing pivot Model instance.
+     * Create a new existing pivot model instance.
      *
      * @param  array  $attributes
      * @return \Illuminate\Database\Eloquent\Relations\Pivot

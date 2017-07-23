@@ -11,14 +11,14 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 class HasManyThrough extends Relation
 {
     /**
-     * The "through" parent Model instance.
+     * The "through" parent model instance.
      *
      * @var \Illuminate\Database\Eloquent\Model
      */
     protected $throughParent;
 
     /**
-     * The far parent Model instance.
+     * The far parent model instance.
      *
      * @var \Illuminate\Database\Eloquent\Model
      */
@@ -170,7 +170,7 @@ class HasManyThrough extends Relation
     }
 
     /**
-     * Build Model dictionary keyed by the relation's foreign key.
+     * Build model dictionary keyed by the relation's foreign key.
      *
      * @param  \Illuminate\Database\Eloquent\Collection  $results
      * @return array
@@ -190,7 +190,7 @@ class HasManyThrough extends Relation
     }
 
     /**
-     * Get the first related Model record matching the attributes or instantiate it.
+     * Get the first related model record matching the attributes or instantiate it.
      *
      * @param  array  $attributes
      * @return \Illuminate\Database\Eloquent\Model
@@ -221,7 +221,7 @@ class HasManyThrough extends Relation
     }
 
     /**
-     * Execute the query and get the first related Model.
+     * Execute the query and get the first related model.
      *
      * @param  array   $columns
      * @return mixed
@@ -247,11 +247,11 @@ class HasManyThrough extends Relation
             return $model;
         }
 
-        throw (new ModelNotFoundException)->setModel(get_class($this->parent));
+        throw (new ModelNotFoundException)->setModel(get_class($this->related));
     }
 
     /**
-     * Find a related Model by its primary key.
+     * Find a related model by its primary key.
      *
      * @param  mixed  $id
      * @param  array  $columns
@@ -287,7 +287,7 @@ class HasManyThrough extends Relation
     }
 
     /**
-     * Find a related Model by its primary key or throw an exception.
+     * Find a related model by its primary key or throw an exception.
      *
      * @param  mixed  $id
      * @param  array  $columns
@@ -330,7 +330,7 @@ class HasManyThrough extends Relation
     {
         // First we'll add the proper select columns onto the query so it is run with
         // the proper columns. Then, we will get the results and hydrate out pivot
-        // models with the result of those columns as a separate Model relation.
+        // models with the result of those columns as a separate model relation.
         $columns = $this->query->getQuery()->columns ? [] : $columns;
 
         $builder = $this->query->applyScopes();
@@ -424,7 +424,7 @@ class HasManyThrough extends Relation
     }
 
     /**
-     * Get the qualified foreign key on the related Model.
+     * Get the qualified foreign key on the related model.
      *
      * @return string
      */
@@ -434,7 +434,7 @@ class HasManyThrough extends Relation
     }
 
     /**
-     * Get the qualified foreign key on the related Model.
+     * Get the qualified foreign key on the related model.
      *
      * @return string
      */
@@ -444,7 +444,7 @@ class HasManyThrough extends Relation
     }
 
     /**
-     * Get the qualified foreign key on the "through" Model.
+     * Get the qualified foreign key on the "through" model.
      *
      * @return string
      */

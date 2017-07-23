@@ -15,7 +15,7 @@ abstract class MorphOneOrMany extends HasOneOrMany
     protected $morphType;
 
     /**
-     * The class name of the parent Model.
+     * The class name of the parent model.
      *
      * @var string
      */
@@ -38,6 +38,22 @@ abstract class MorphOneOrMany extends HasOneOrMany
         $this->morphClass = $parent->getMorphClass();
 
         parent::__construct($query, $parent, $id, $localKey);
+    }
+
+    /**
+     * Create and return an un-saved instance of the related model.
+     *
+     * @param  array  $attributes
+     * @return \Illuminate\Database\Eloquent\Model
+     */
+    public function make(array $attributes = [])
+    {
+        return tap($this->related->newInstance($attributes), function ($instance) {
+            // When saving a polymorphic relationship, we need to set not only the foreign
+            // key, but also the foreign key type, which is typically the class name of
+            // the parent model. This makes the polymorphic item unique in the table.
+            $this->setForeignAttributesForCreate($instance);
+        });
     }
 
     /**
@@ -68,7 +84,7 @@ abstract class MorphOneOrMany extends HasOneOrMany
     }
 
     /**
-     * Find a related Model by its primary key or return new instance of the related Model.
+     * Find a related model by its primary key or return new instance of the related model.
      *
      * @param  mixed  $id
      * @param  array  $columns
@@ -81,7 +97,7 @@ abstract class MorphOneOrMany extends HasOneOrMany
 
             // When saving a polymorphic relationship, we need to set not only the foreign
             // key, but also the foreign key type, which is typically the class name of
-            // the parent Model. This makes the polymorphic item unique in the table.
+            // the parent model. This makes the polymorphic item unique in the table.
             $this->setForeignAttributesForCreate($instance);
         }
 
@@ -89,7 +105,7 @@ abstract class MorphOneOrMany extends HasOneOrMany
     }
 
     /**
-     * Get the first related Model record matching the attributes or instantiate it.
+     * Get the first related model record matching the attributes or instantiate it.
      *
      * @param  array  $attributes
      * @return \Illuminate\Database\Eloquent\Model
@@ -101,7 +117,7 @@ abstract class MorphOneOrMany extends HasOneOrMany
 
             // When saving a polymorphic relationship, we need to set not only the foreign
             // key, but also the foreign key type, which is typically the class name of
-            // the parent Model. This makes the polymorphic item unique in the table.
+            // the parent model. This makes the polymorphic item unique in the table.
             $this->setForeignAttributesForCreate($instance);
         }
 
@@ -140,7 +156,7 @@ abstract class MorphOneOrMany extends HasOneOrMany
     }
 
     /**
-     * Attach a Model instance to the parent Model.
+     * Attach a model instance to the parent model.
      *
      * @param  \Illuminate\Database\Eloquent\Model  $model
      * @return \Illuminate\Database\Eloquent\Model
@@ -153,7 +169,7 @@ abstract class MorphOneOrMany extends HasOneOrMany
     }
 
     /**
-     * Create a new instance of the related Model.
+     * Create a new instance of the related model.
      *
      * @param  array  $attributes
      * @return \Illuminate\Database\Eloquent\Model
@@ -164,7 +180,7 @@ abstract class MorphOneOrMany extends HasOneOrMany
 
         // When saving a polymorphic relationship, we need to set not only the foreign
         // key, but also the foreign key type, which is typically the class name of
-        // the parent Model. This makes the polymorphic item unique in the table.
+        // the parent model. This makes the polymorphic item unique in the table.
         $this->setForeignAttributesForCreate($instance);
 
         $instance->save();
@@ -173,7 +189,7 @@ abstract class MorphOneOrMany extends HasOneOrMany
     }
 
     /**
-     * Set the foreign ID and type for creating a related Model.
+     * Set the foreign ID and type for creating a related model.
      *
      * @param  \Illuminate\Database\Eloquent\Model  $model
      * @return void
@@ -221,7 +237,7 @@ abstract class MorphOneOrMany extends HasOneOrMany
     }
 
     /**
-     * Get the class name of the parent Model.
+     * Get the class name of the parent model.
      *
      * @return string
      */

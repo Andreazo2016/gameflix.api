@@ -10,18 +10,19 @@ use Illuminate\Support\Str;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Collection as BaseCollection;
+use Illuminate\Database\Eloquent\JsonEncodingException;
 
 trait HasAttributes
 {
     /**
-     * The Model's attributes.
+     * The model's attributes.
      *
      * @var array
      */
     protected $attributes = [];
 
     /**
-     * The Model attribute's original state.
+     * The model attribute's original state.
      *
      * @var array
      */
@@ -42,14 +43,14 @@ trait HasAttributes
     protected $dates = [];
 
     /**
-     * The storage format of the Model's date columns.
+     * The storage format of the model's date columns.
      *
      * @var string
      */
     protected $dateFormat;
 
     /**
-     * The accessors to append to the Model's array form.
+     * The accessors to append to the model's array form.
      *
      * @var array
      */
@@ -70,7 +71,7 @@ trait HasAttributes
     protected static $mutatorCache = [];
 
     /**
-     * Convert the Model's attributes to an array.
+     * Convert the model's attributes to an array.
      *
      * @return array
      */
@@ -78,7 +79,7 @@ trait HasAttributes
     {
         // If an attribute is a date, we will cast it to a string after converting it
         // to a DateTime / Carbon instance. This is so we will get some consistent
-        // formatting while accessing attributes vs. arraying / JSONing a Model.
+        // formatting while accessing attributes vs. arraying / JSONing a model.
         $attributes = $this->addDateAttributesToArray(
             $attributes = $this->getArrayableAttributes()
         );
@@ -87,16 +88,16 @@ trait HasAttributes
             $attributes, $mutatedAttributes = $this->getMutatedAttributes()
         );
 
-        // Next we will handle any casts that have been setup for this Model and cast
+        // Next we will handle any casts that have been setup for this model and cast
         // the values to their appropriate type. If the attribute has a mutator we
         // will not perform the cast on those attributes to avoid any confusion.
         $attributes = $this->addCastAttributesToArray(
             $attributes, $mutatedAttributes
         );
 
-        // Here we will grab all of the appended, calculated attributes to this Model
+        // Here we will grab all of the appended, calculated attributes to this model
         // as these attributes are not really in the attributes array, but are run
-        // when we need to array or JSON the Model for convenience to the coder.
+        // when we need to array or JSON the model for convenience to the coder.
         foreach ($this->getArrayableAppends() as $key) {
             $attributes[$key] = $this->mutateAttributeForArray($key, null);
         }
@@ -135,7 +136,7 @@ trait HasAttributes
     protected function addMutatedAttributesToArray(array $attributes, array $mutatedAttributes)
     {
         foreach ($mutatedAttributes as $key) {
-            // We want to spin through all the mutated attributes for this Model and call
+            // We want to spin through all the mutated attributes for this model and call
             // the mutator for the attribute. We cache off every mutated attributes so
             // we don't have to constantly check on attributes that actually change.
             if (! array_key_exists($key, $attributes)) {
@@ -213,7 +214,7 @@ trait HasAttributes
     }
 
     /**
-     * Get the Model's relationships in array form.
+     * Get the model's relationships in array form.
      *
      * @return array
      */
@@ -286,7 +287,7 @@ trait HasAttributes
     }
 
     /**
-     * Get an attribute from the Model.
+     * Get an attribute from the model.
      *
      * @param  string  $key
      * @return mixed
@@ -305,7 +306,7 @@ trait HasAttributes
             return $this->getAttributeValue($key);
         }
 
-        // Here we will determine if the Model base class itself contains this given key
+        // Here we will determine if the model base class itself contains this given key
         // since we do not want to treat any of those methods are relationships since
         // they are all intended as helper methods and none of these are relations.
         if (method_exists(self::class, $key)) {
@@ -327,7 +328,7 @@ trait HasAttributes
 
         // If the attribute has a get mutator, we will call that then return what
         // it returns as the value, which is useful for transforming values on
-        // retrieval from the Model to a form that is more useful for usage.
+        // retrieval from the model to a form that is more useful for usage.
         if ($this->hasGetMutator($key)) {
             return $this->mutateAttribute($key, $value);
         }
@@ -378,7 +379,7 @@ trait HasAttributes
             return $this->relations[$key];
         }
 
-        // If the "attribute" exists as a method on the Model, we will just assume
+        // If the "attribute" exists as a method on the model, we will just assume
         // it is a relationship and will load and return results from the query
         // and hydrate the relationship's value on the "relationships" array.
         if (method_exists($this, $key)) {
@@ -490,7 +491,7 @@ trait HasAttributes
     }
 
     /**
-     * Get the type of cast for a Model attribute.
+     * Get the type of cast for a model attribute.
      *
      * @param  string  $key
      * @return string
@@ -501,7 +502,7 @@ trait HasAttributes
     }
 
     /**
-     * Set a given attribute on the Model.
+     * Set a given attribute on the model.
      *
      * @param  string  $key
      * @param  mixed  $value
@@ -511,7 +512,7 @@ trait HasAttributes
     {
         // First we will check for the presence of a mutator for the set operation
         // which simply lets the developers tweak the attribute as it is set on
-        // the Model, such as "json_encoding" an listing of data for storage.
+        // the model, such as "json_encoding" an listing of data for storage.
         if ($this->hasSetMutator($key)) {
             $method = 'set'.Str::studly($key).'Attribute';
 
@@ -526,7 +527,7 @@ trait HasAttributes
         }
 
         if ($this->isJsonCastable($key) && ! is_null($value)) {
-            $value = $this->asJson($value);
+            $value = $this->castAttributeAsJson($key, $value);
         }
 
         // If this attribute contains a JSON ->, we'll set the proper value in the
@@ -565,7 +566,7 @@ trait HasAttributes
     }
 
     /**
-     * Set a given JSON attribute on the Model.
+     * Set a given JSON attribute on the model.
      *
      * @param  string  $key
      * @param  mixed  $value
@@ -607,6 +608,26 @@ trait HasAttributes
     {
         return isset($this->attributes[$key]) ?
                     $this->fromJson($this->attributes[$key]) : [];
+    }
+
+    /**
+     * Cast the given attribute to JSON.
+     *
+     * @param  string  $key
+     * @param  mixed  $value
+     * @return string
+     */
+    protected function castAttributeAsJson($key, $value)
+    {
+        $value = $this->asJson($value);
+
+        if ($value === false) {
+            throw JsonEncodingException::forAttribute(
+                $this, $key, json_last_error_msg()
+            );
+        }
+
+        return $value;
     }
 
     /**
@@ -758,7 +779,7 @@ trait HasAttributes
     }
 
     /**
-     * Set the date format used by the Model.
+     * Set the date format used by the model.
      *
      * @param  string  $format
      * @return $this
@@ -823,7 +844,7 @@ trait HasAttributes
     }
 
     /**
-     * Get all of the current attributes on the Model.
+     * Get all of the current attributes on the model.
      *
      * @return array
      */
@@ -833,7 +854,7 @@ trait HasAttributes
     }
 
     /**
-     * Set the array of Model attributes. No checking is done.
+     * Set the array of model attributes. No checking is done.
      *
      * @param  array  $attributes
      * @param  bool  $sync
@@ -851,7 +872,7 @@ trait HasAttributes
     }
 
     /**
-     * Get the Model's original attribute values.
+     * Get the model's original attribute values.
      *
      * @param  string|null  $key
      * @param  mixed  $default
@@ -888,7 +909,7 @@ trait HasAttributes
     }
 
     /**
-     * Determine if the Model or given attribute(s) have been modified.
+     * Determine if the model or given attribute(s) have been modified.
      *
      * @param  array|string|null  $attributes
      * @return bool
@@ -920,7 +941,7 @@ trait HasAttributes
     }
 
     /**
-     * Determine if the Model or given attribute(s) have remained the same.
+     * Determine if the model or given attribute(s) have remained the same.
      *
      * @param  array|string|null  $attributes
      * @return bool
@@ -986,7 +1007,7 @@ trait HasAttributes
     }
 
     /**
-     * Set the accessors to append to Model arrays.
+     * Set the accessors to append to model arrays.
      *
      * @param  array  $appends
      * @return $this

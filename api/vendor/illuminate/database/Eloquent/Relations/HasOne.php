@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Collection;
 class HasOne extends HasOneOrMany
 {
     /**
-     * Indicates if a default Model instance should be used.
+     * Indicates if a default model instance should be used.
      *
      * Alternatively, may be a Closure or array.
      *
@@ -83,7 +83,7 @@ class HasOne extends HasOneOrMany
     }
 
     /**
-     * Return a new Model instance in case the relationship does not exist.
+     * Return a new model instance in case the relationship does not exist.
      *
      * @param  \Closure|array|bool  $callback
      * @return $this

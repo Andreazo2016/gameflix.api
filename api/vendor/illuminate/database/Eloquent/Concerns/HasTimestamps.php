@@ -7,14 +7,14 @@ use Carbon\Carbon;
 trait HasTimestamps
 {
     /**
-     * Indicates if the Model should be timestamped.
+     * Indicates if the model should be timestamped.
      *
      * @var bool
      */
     public $timestamps = true;
 
     /**
-     * Update the Model's update timestamp.
+     * Update the model's update timestamp.
      *
      * @return bool
      */
@@ -74,7 +74,7 @@ trait HasTimestamps
     }
 
     /**
-     * Get a fresh timestamp for the Model.
+     * Get a fresh timestamp for the model.
      *
      * @return \Carbon\Carbon
      */
@@ -84,7 +84,7 @@ trait HasTimestamps
     }
 
     /**
-     * Get a fresh timestamp for the Model.
+     * Get a fresh timestamp for the model.
      *
      * @return string
      */
@@ -94,7 +94,7 @@ trait HasTimestamps
     }
 
     /**
-     * Determine if the Model uses timestamps.
+     * Determine if the model uses timestamps.
      *
      * @return bool
      */

@@ -9,14 +9,14 @@ use Illuminate\Database\Eloquent\Collection;
 abstract class HasOneOrMany extends Relation
 {
     /**
-     * The foreign key of the parent Model.
+     * The foreign key of the parent model.
      *
      * @var string
      */
     protected $foreignKey;
 
     /**
-     * The local key of the parent Model.
+     * The local key of the parent model.
      *
      * @var string
      */
@@ -44,6 +44,19 @@ abstract class HasOneOrMany extends Relation
         $this->foreignKey = $foreignKey;
 
         parent::__construct($query, $parent);
+    }
+
+    /**
+     * Create and return an un-saved instance of the related model.
+     *
+     * @param  array  $attributes
+     * @return \Illuminate\Database\Eloquent\Model
+     */
+    public function make(array $attributes = [])
+    {
+        return tap($this->related->newInstance($attributes), function ($instance) {
+            $instance->setAttribute($this->getForeignKeyName(), $this->getParentKey());
+        });
     }
 
     /**
@@ -142,7 +155,7 @@ abstract class HasOneOrMany extends Relation
     }
 
     /**
-     * Build Model dictionary keyed by the relation's foreign key.
+     * Build model dictionary keyed by the relation's foreign key.
      *
      * @param  \Illuminate\Database\Eloquent\Collection  $results
      * @return array
@@ -164,7 +177,7 @@ abstract class HasOneOrMany extends Relation
     }
 
     /**
-     * Find a Model by its primary key or return new instance of the related Model.
+     * Find a model by its primary key or return new instance of the related model.
      *
      * @param  mixed  $id
      * @param  array  $columns
@@ -182,7 +195,7 @@ abstract class HasOneOrMany extends Relation
     }
 
     /**
-     * Get the first related Model record matching the attributes or instantiate it.
+     * Get the first related model record matching the attributes or instantiate it.
      *
      * @param  array  $attributes
      * @return \Illuminate\Database\Eloquent\Model
@@ -230,10 +243,10 @@ abstract class HasOneOrMany extends Relation
     }
 
     /**
-     * Attach a Model instance to the parent Model.
+     * Attach a model instance to the parent model.
      *
      * @param  \Illuminate\Database\Eloquent\Model  $model
-     * @return \Illuminate\Database\Eloquent\Model
+     * @return \Illuminate\Database\Eloquent\Model|false
      */
     public function save(Model $model)
     {
@@ -258,7 +271,7 @@ abstract class HasOneOrMany extends Relation
     }
 
     /**
-     * Create a new instance of the related Model.
+     * Create a new instance of the related model.
      *
      * @param  array  $attributes
      * @return \Illuminate\Database\Eloquent\Model
@@ -273,7 +286,7 @@ abstract class HasOneOrMany extends Relation
     }
 
     /**
-     * Create a Collection of new instances of the related Model.
+     * Create a Collection of new instances of the related model.
      *
      * @param  array  $records
      * @return \Illuminate\Database\Eloquent\Collection

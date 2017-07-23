@@ -17,6 +17,7 @@ class ComposerStaticInit31c60205fa15cbe7196445a12cdfd936
         array (
             'Symfony\\Polyfill\\Mbstring\\' => 26,
             'Symfony\\Component\\Translation\\' => 30,
+            'Slim\\Middleware\\' => 16,
         ),
         'I' => 
         array (
@@ -43,6 +44,10 @@ class ComposerStaticInit31c60205fa15cbe7196445a12cdfd936
         'Symfony\\Component\\Translation\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/translation',
+        ),
+        'Slim\\Middleware\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/dyorg/slim-token-authentication/src',
         ),
         'Illuminate\\Support\\' => 
         array (

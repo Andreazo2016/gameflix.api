@@ -9,19 +9,19 @@ use Illuminate\Database\Eloquent\Collection;
 class BelongsTo extends Relation
 {
     /**
-     * The child Model instance of the relation.
+     * The child model instance of the relation.
      */
     protected $child;
 
     /**
-     * The foreign key of the parent Model.
+     * The foreign key of the parent model.
      *
      * @var string
      */
     protected $foreignKey;
 
     /**
-     * The associated key on the parent Model.
+     * The associated key on the parent model.
      *
      * @var string
      */
@@ -191,7 +191,7 @@ class BelongsTo extends Relation
     }
 
     /**
-     * Update the parent Model on the relationship.
+     * Update the parent model on the relationship.
      *
      * @param  array  $attributes
      * @return mixed
@@ -202,9 +202,9 @@ class BelongsTo extends Relation
     }
 
     /**
-     * Associate the Model instance to the given parent.
+     * Associate the model instance to the given parent.
      *
-     * @param  \Illuminate\Database\Eloquent\Model|int  $model
+     * @param  \Illuminate\Database\Eloquent\Model|int|string  $model
      * @return \Illuminate\Database\Eloquent\Model
      */
     public function associate($model)
@@ -221,7 +221,7 @@ class BelongsTo extends Relation
     }
 
     /**
-     * Dissociate previously associated Model from the given parent.
+     * Dissociate previously associated model from the given parent.
      *
      * @return \Illuminate\Database\Eloquent\Model
      */
@@ -283,7 +283,7 @@ class BelongsTo extends Relation
     }
 
     /**
-     * Determine if the related Model has an auto-incrementing ID.
+     * Determine if the related model has an auto-incrementing ID.
      *
      * @return bool
      */

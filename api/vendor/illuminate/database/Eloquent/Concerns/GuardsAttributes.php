@@ -28,7 +28,7 @@ trait GuardsAttributes
     protected static $unguarded = false;
 
     /**
-     * Get the fillable attributes for the Model.
+     * Get the fillable attributes for the model.
      *
      * @return array
      */
@@ -38,7 +38,7 @@ trait GuardsAttributes
     }
 
     /**
-     * Set the fillable attributes for the Model.
+     * Set the fillable attributes for the model.
      *
      * @param  array  $fillable
      * @return $this
@@ -51,7 +51,7 @@ trait GuardsAttributes
     }
 
     /**
-     * Get the guarded attributes for the Model.
+     * Get the guarded attributes for the model.
      *
      * @return array
      */
@@ -61,7 +61,7 @@ trait GuardsAttributes
     }
 
     /**
-     * Set the guarded attributes for the Model.
+     * Set the guarded attributes for the model.
      *
      * @param  array  $guarded
      * @return $this
@@ -139,13 +139,13 @@ trait GuardsAttributes
 
         // If the key is in the "fillable" array, we can of course assume that it's
         // a fillable attribute. Otherwise, we will check the guarded array when
-        // we need to determine if the attribute is black-listed on the Model.
+        // we need to determine if the attribute is black-listed on the model.
         if (in_array($key, $this->getFillable())) {
             return true;
         }
 
         // If the attribute is explicitly listed in the "guarded" array then we can
-        // retunr false immediately. This means this attribute is definitely not
+        // return false immediately. This means this attribute is definitely not
         // fillable and there is no point in going any further in this method.
         if ($this->isGuarded($key)) {
             return false;
@@ -167,7 +167,7 @@ trait GuardsAttributes
     }
 
     /**
-     * Determine if the Model is totally guarded.
+     * Determine if the model is totally guarded.
      *
      * @return bool
      */

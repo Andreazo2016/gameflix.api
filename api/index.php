@@ -3,22 +3,44 @@
 
 require 'vendor/autoload.php';
 require 'app/database/settings.php';
+require_once  'app/Middleware/AuthToken.php';
 
 //imports
+use Slim\Middleware\TokenAuthentication;
 use Api\Model\Game;
 use Api\Model\Usuario;
-
+//classe de Middleware
+$mid = new Api\Middleware\Auth();
 $app = new \Slim\Slim();
+
+
+
+$authenticator = function ($request,TokenAuthentication $tokenAuth){
+    $token = $tokenAuth->findToken($request);
+     Auth::autenticaUser($token);
+
+};
+
+
 $app->response->headers->set('Access-Control-Allow-Origin',  'http://localhost/app.multimeios/app/');
 $app->response->headers->set('Access-Control-Allow-Headers', '*');
 $app->response->headers->set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
 
-    $app->get('/', function () use ($app){
+    //adiciona um middleware que vai fazer a validação do token
+    $app->add(new AuthToken());
+
+    //chamando class de middlear
+    $app->get('/',function () use ($app){
         $routes = [
             'Api-GameFlix'=>'ANDREAZO'
         ];
 
         $app->response->setBody(json_encode($routes));
+    });
+    $app->get('/erro',function () use ($app){
+        $erro = ['Msg' =>'ERROR'];
+        $app->response->setBody(json_encode($erro));
+
     });
     //get all Games
     $app->get('/games',function () use ($app){
