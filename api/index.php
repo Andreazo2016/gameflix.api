@@ -1,18 +1,12 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: luisfernando
- * Date: 16/04/2017
- * Time: 18:58
- */
+
 
 require 'vendor/autoload.php';
 require 'app/database/settings.php';
 
-
-
-
+//imports
 use Api\Model\Game;
+use Api\Model\Usuario;
 
 $app = new \Slim\Slim();
 $app->response->headers->set('Access-Control-Allow-Origin',  'http://localhost/app.multimeios/app/');
@@ -21,24 +15,47 @@ $app->response->headers->set('Access-Control-Allow-Methods', 'GET, POST, PUT, DE
 
     $app->get('/', function () use ($app){
         $routes = [
-            'total' => 6,
-            'routes' => [
-                'GET' => [
-                    'CRYPT' => ['bcrypt/:password'],
-                    'STUDENT' => [
-                         'users',
-                         'users/:registration/:password',
-                         'users/:id',
-                         'users-discipline/:id',
-                         'archives-discipline/:id'
-                    ]
-                ]
-            ]
+            'Api-GameFlix'=>'ANDREAZO'
         ];
 
         $app->response->setBody(json_encode($routes));
     });
-    /* Encrypt password */
+
+    $app->get('/games',function () use ($app){
+        $games = Game::all();
+        $app->response->setBody(json_encode($games));
+    });
+    $app->get('/games/:id',function ($id) use ($app){
+        $game = Game::find($id);
+        if($game === null) $game = false;
+        $app->response->setBody(json_encode($game));
+    });
+    $app->post('/games',function () use ($app){
+        $nome = $app->request->post('nome');
+        $categoria = $app->request->post('categoria');
+        $preco = $app->request->post('preco');
+        $url =$app->request->post('url');
+
+        Game::create(['id'=>0,'nome'=>$nome,'categoria'=>$categoria,'preco'=>$preco,'url'=>$url]);
+        $reposta = [
+            '200'=>'OK'
+        ];
+        $app->response->setBody(json_encode($reposta));
+
+    });
+
+    $app->get('/usuarios',function () use ($app){
+        $usuarios = Usuario::all();
+        $app->response->setBody(json_encode($usuarios));
+    });
+    $app->post('/usuarios',function () use ($app){
+        $nome = $app->request->post('nome');
+        $teste = ['nome'=>$nome];
+        $app->response->setBody(json_encode($teste));
+    });
+
+
+//    /* Encrypt password */
 //    $app->get('/bcrypt/:password', function ($password) use ($app){
 //        $passwordDC = Bcrypt::hash($password);
 //        $data = [
@@ -46,22 +63,13 @@ $app->response->headers->set('Access-Control-Allow-Methods', 'GET, POST, PUT, DE
 //        ];
 //        $app->response->setBody(json_encode($data));
 //    });
-//
+
 //    /* Get all users */
 //    $app->get('/users', function () use ($app) {
 //        $user =  User::all();
 //        $app->response->setBody(json_encode($user));
 //    });
-$app->get('/games', function () use ($app) {
-    $games =  Game::all();
-    $app->response->setBody(json_encode($games));
-});
-$app->get('/games/:id', function ($id) use ($app) {
-    $game =  Game::find($id);
-        if($game === null) $user = false;
-       $app->response->setBody(json_encode($game));
-});
-
+//
 //    /* Get user if exist */
 //    $app->get('/users/:registration/:password', function ($registration, $password) use ($app) {
 //        $registrationUser = User::select('*')->where('registration', '=', $registration)->get()->first();

@@ -1,20 +1,19 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: luisfernando
- * Date: 16/04/17
- * Time: 22:09
+ * User: andreazo
+ * Date: 23/07/17
+ * Time: 09:37
  */
 
 namespace Api\Model;
 use \Illuminate\Database\Eloquent\Model as Illuminate;
 
 
-
 class Game extends Illuminate
 {
-    protected  $table = 'game';
+    protected $table = 'game';
+    public $timestamps = false;
 
-    public $fillable = ['ID','nome','categoria'];
-
+    public $fillable = ['id', 'nome', 'categoria','preco','url'];
 }

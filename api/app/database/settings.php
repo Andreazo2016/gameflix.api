@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: luisfernando
- * Date: 16/04/2017
- * Time: 18:58
- */
+
 use Illuminate\Container\Container as Container;
 use Illuminate\Database\Connectors\ConnectionFactory as ConnectionFactory;
 use Illuminate\Database\ConnectionResolver as ConnectionResolver;
